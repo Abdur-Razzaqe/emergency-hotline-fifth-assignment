@@ -61,6 +61,7 @@
 
         <!-- Copy Button -->
         <button
+          id="copyButton"
           class="bg-green-500 hover:bg-green-600 text-white text-base p-1 md:px-4 md:py-1.5 rounded-full font-medium"
         >
           <span id="copy-count">0</span> Copy
@@ -88,7 +89,7 @@
     <!-- card section started here -->
 
     <section class="bg-[#F5FFF6] p-10">
-      <div class="max-w-[1800px] mx-auto">
+      <div id="services-box" class="max-w-[1800px] mx-auto">
         <div class="flex flex-col lg:flex-row gap-6">
           <!-- Left: Cards Grid -->
           <div
@@ -126,7 +127,7 @@
               <!-- Buttons -->
               <div class="flex gap-2 mt-[15px]">
                 <button
-                  class="flex-1 border border-gray-300 text-sm p-[10px] rounded-2xl hover:bg-gray-400"
+                  class="flex-1 copyBtn border border-gray-300 text-sm p-[10px] rounded-2xl hover:bg-gray-400 cursor-pointer"
                 >
                   <span class="mr-[2px]"
                     ><i class="fa-solid fa-copy hover:text-blue-600"></i></span

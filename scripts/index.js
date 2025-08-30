@@ -1,65 +1,108 @@
-// console.log(document);
+// heart Count part
 
-function getElement(id) {
-  const element = document.getElementById(id);
-  return element;
+let totalHearts = 0;
+
+const heartIcons = document.querySelectorAll(".heart-icon");
+const heartCountSpan = document.getElementById("heart-count");
+
+heartIcons.forEach((icon) => {
+  icon.addEventListener("click", () => {
+    totalHearts++;
+    heartCountSpan.textContent = totalHearts;
+
+    // visual indication (optional)
+    icon.classList.add("text-red-600");
+    icon.classList.remove("text-gray-400");
+  });
+});
+
+// callButtons & callHistory part
+
+let coins = 100;
+
+// DOM Elements
+const coinCountSpan = document.getElementById("coin-count");
+const callButtons = document.querySelectorAll(".fa-phone");
+const callHistory = document.getElementById("call-history");
+const clearButton = document.getElementById("clear-history");
+
+// Update coin display
+function updateCoins() {
+  coinCountSpan.textContent = coins;
 }
-// const heartBtns = document.getElementsByClassName("heart-btn");
-// for (let heartButton of heartBtns) {
-//   heartButton.addEventListener("click");
-// }
 
-// let count = 0;
-// const button = document.getElementById("heart");
-// const counter = document.getElementById("heart-count");
-// button.addEventListener("clicked", () => {
-//   count++;
-//   counter.textContent = "heart-count" + count;
-// });
-// console.log(heart - count);
+// Add to Call History
+function addToHistory(serviceName, serviceNumber) {
+  const historyItem = document.createElement("div");
+  historyItem.className = "p-[16px] bg-gray-200 rounded-xl";
+  historyItem.innerHTML = `
+      <p class="text-base font-semibold">${serviceName}</p>
+      <div class="flex justify-between text-xs text-gray-500">
+        <span>${serviceNumber}</span>
+        <span>${new Date().toLocaleTimeString()}</span>
+      </div>
+    `;
+  callHistory.prepend(historyItem);
+}
 
-// let clickCount = 0;
-// const heartButton = document.getElementById("heartButton");
-// const heartCount = document.getElementById("heartCount");
+// Handle Call Button Click
+callButtons.forEach((icon) => {
+  icon.closest("button").addEventListener("click", () => {
+    const card = icon.closest(".bg-white");
+    const serviceName = card.querySelector("h2").textContent.trim();
+    const serviceNumber = card.querySelector("p.text-2xl").textContent.trim();
 
-// heartButton.addEventListener("click", function () {
-//   clickCount++;
-//   heartCount.textContent = clickCount;
-// });
+    if (coins < 20) {
+      alert("Not enough coins to make a call.");
+      return;
+    }
 
-getElement("services-box").addEventListener("click", function (e) {
-  if (e.target.className.includes("copyBtn")) {
-    displayElement.textContent = e.target.title;
-  }
-  console.log(this.title);
-});
-// ==============================================
-// document.getElementsByClassName("heartBtn");
+    coins -= 20;
+    updateCoins();
 
-// for (let i = 0; i < heartBtn.length; i++) {
-//   heartBtn[i].addEventListener("click", function () {
-//     console.log("btn clicked");
-//   });
-// }
-
-// heart btn clicked
-let heartBtns = document.querySelectorAll(".heartBtn");
-let clickedCount = 0;
-heartBtns.forEach((btn) => {
-  btn.addEventListener("click", function () {
-    clickedCount++;
-    heartCount.textContent = clickedCount;
+    alert(`📞Calling ${serviceName} at ${serviceNumber}`);
+    addToHistory(serviceName, serviceNumber);
   });
 });
 
-// copy btn clicked
-let copyBtns = document.querySelectorAll(".copyBtn");
-let clickCount = 0;
-copyBtns.forEach((btn) => {
-  btn.addEventListener("click", function () {
-    clickCount++;
-    copyCount.textContent = clickCount;
-  });
+//  History will clear
+clearButton.addEventListener("click", () => {
+  callHistory.innerHTML = "";
 });
 
-// call btn clicked
+// coin count on page load
+updateCoins();
+
+//   copy section
+
+document.addEventListener("DOMContentLoaded", function () {
+  let copyCount = 0;
+
+  const copyIcons = document.querySelectorAll(".fa-copy");
+
+  const copyCountSpan = document.getElementById("copy-count");
+
+  copyIcons.forEach((icon) => {
+    icon.closest("button").addEventListener("click", () => {
+      const card = icon.closest(".bg-white");
+
+      const serviceNumber = card.querySelector("p.text-2xl").textContent.trim();
+
+      navigator.clipboard
+        .writeText(serviceNumber)
+        .then(() => {
+          copyCount++;
+
+          if (copyCountSpan) {
+            copyCountSpan.textContent = copyCount;
+          }
+
+          alert(`Copied: ${serviceNumber}`);
+        })
+        .catch((err) => {
+          alert("Failed to copy the number.");
+          console.error(err);
+        });
+    });
+  });
+});
